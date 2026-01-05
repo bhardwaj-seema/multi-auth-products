@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -10,19 +11,25 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
 class ProductImport implements 
-ToModel, WithHeadingRow,WithBatchInserts,WithChunkReading,WithValidation
+ToModel, WithHeadingRow,WithBatchInserts,WithChunkReading,WithValidation,ShouldQueue
 {
     
 
     public function model(array $row)
     {
+       $imageName = trim($row['image'] ?? '');
+
+$image = file_exists(
+    public_path('storage/products/' . $imageName)
+) ? $imageName : null;
+
         return new Product([
             'name'        => $row['name'],
             'description' => $row['description'] ?? null,
             'price'       => $row['price'],
             'stock'       => $row['stock'],
             'category'    => $row['category'],
-            'image'       => $row['image'] ?? 'default.png',
+            'image'       => $image ?? 'default.png',
         ]);
     }
 

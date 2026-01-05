@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -26,10 +27,14 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (auth()->guard('customer')->attempt($credentials,$request->boolean('remember'))) {
+        if (Auth::guard('customer')->attempt($credentials,$request->boolean('remember'))) {
             $request->session()->regenerate();
+            Auth::guard('customer')->user()->update(
+                ['is_online' => true,
+                 'last_seen_at' => now()
+                ]);
             // Authentication passed...
-            return redirect()->intended('/customer/dashboard');
+            return redirect()->intended(route('customer.dashboard'));
         }
 
         return back()->withErrors([
@@ -47,6 +52,7 @@ class LoginController extends Controller
 
     public function dashboard()
     {
-        return view('customer.dashboard');
+        $customers = \App\Models\Customer::select('name','is_online')->get();
+        return view('customer.dashboard', compact('customers'));
     }
 }

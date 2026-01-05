@@ -2,34 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center bg-gray-100">
 
-@if ($errors->any())
-    <div style="color:red">
-        {{ $errors->first() }}
+    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+        <h1 class="text-2xl font-semibold text-gray-700 mb-6 text-center">
+            Admin Login
+        </h1>
+
+        @if ($errors->any())
+            <div class="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('admin.login.post') }}" class="space-y-4">
+            @csrf
+
+            <div>
+                <label class="block text-sm text-gray-600 mb-1">Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-600 mb-1">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
+                >
+            </div>
+
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    name="remember"
+                    value="1"
+                    class="mr-2"
+                >
+                <span class="text-sm text-gray-600">Remember me</span>
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+            >
+                Login
+            </button>
+        </form>
     </div>
-@endif
-
-<form method="POST" action="{{ route('admin.login.post') }}">
-    @csrf
-
-    <input type="email" name="email" placeholder="Email" required>
-    <br>
-
-    <input type="password" name="password" placeholder="Password" required>
-    <br>
-
-    <label>
-        <input type="checkbox" name="remember" value="1">
-        Remember me
-    </label>
-    <br>
-
-    <button type="submit">Login</button>
-</form>
 
 </body>
 </html>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +37,7 @@ class LoginController extends Controller
                 ['is_online' => true,
                  'last_seen_at' => now()
                 ]);
+               
             // Authentication passed...
             return redirect()->intended(route('admin.dashboard'));
         }
@@ -58,7 +61,9 @@ class LoginController extends Controller
 
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $admins = Admin::select('name','is_online')->get();
+        $customers = Customer::select('name','is_online')->get();
+        return view('admin.dashboard', compact('admins', 'customers'));
     }
 
 }

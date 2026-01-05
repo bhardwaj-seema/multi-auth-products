@@ -30,7 +30,8 @@
                 <th class="text-left px-4 py-3">#</th>
                 <th class="text-left px-4 py-3">Name</th>
                 <th class="text-left px-4 py-3">Price</th>
-            
+            <th class="text-left px-4 py-3">Image
+</th>
                 <th class="text-right px-4 py-3">Actions</th>
             </tr>
         </thead>
@@ -50,7 +51,10 @@
                         ₹{{ number_format($product->price, 2) }}
                     </td>
 
-                   
+                   <td class="px-4 py-3">
+
+                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-12 w-12 object-cover rounded">
+                   </td>
 
                     <td class="px-4 py-3 text-right space-x-2">
                         <a href="{{ route('admin.products.edit', $product->id) }}"
