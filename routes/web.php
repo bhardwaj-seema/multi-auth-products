@@ -19,22 +19,31 @@ Route::get('/', function () {
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'login'])->name('login.post');
-    Route::post('/logout', [App\Http\Controllers\Admin\Auth\LoginController::class, 'logout'])->name('logout');
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'login'])->name('login.post');
+    });
+  
 
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\Auth\LoginController::class, 'dashboard'])->name('dashboard');
+        Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
+        Route::get('products-import', [App\Http\Controllers\Admin\ProductController::class, 'importForm'])->name('products.import');
+        Route::post('products-import', [App\Http\Controllers\Admin\ProductController::class, 'import'])->name('products.import.post');
+          Route::post('/logout', [App\Http\Controllers\Admin\Auth\LoginController::class, 'logout'])->name('logout');
     });
+});
 
 
-    Route::prefix('customer')->name('customer.')->group(function () {
-        Route::get('/login', [App\Http\Controllers\Customer\Auth\LoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [App\Http\Controllers\Customer\Auth\LoginController::class, 'login'])->name('login.post');
-        Route::post('/logout', [App\Http\Controllers\Customer\Auth\LoginController::class, 'logout'])->name('logout');
+ Route::prefix('customer')->name('customer.')->group(function () {
+        Route::middleware('guest:customer')->group(function () {
+            Route::get('/login', [App\Http\Controllers\Customer\Auth\LoginController::class, 'showLoginForm'])->name('login');
+            Route::post('/login', [App\Http\Controllers\Customer\Auth\LoginController::class, 'login'])->name('login.post');
+        });
+       
     
         Route::middleware('auth:customer')->group(function () {
             Route::get('/dashboard', [App\Http\Controllers\Customer\Auth\LoginController::class, 'dashboard'])->name('dashboard');
+             Route::post('/logout', [App\Http\Controllers\Customer\Auth\LoginController::class, 'logout'])->name('logout');
         });
     });
-});

@@ -26,12 +26,17 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email', 'password');
+     
 
-        if (auth()->guard('admin')->attempt($credentials,$request->boolean('remember'))) {
+        if (Auth::guard('admin')->attempt($credentials,$request->boolean('remember'))) {
             $request->session()->regenerate();
-            Auth::guard('admin')->user()->update(['is_online' => true, 'last_seen_at' => now()]);
+            
+            Auth::guard('admin')->user()->update(
+                ['is_online' => true,
+                 'last_seen_at' => now()
+                ]);
             // Authentication passed...
-            return redirect()->intended('/admin/dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         return back()->withErrors([
