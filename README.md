@@ -38,7 +38,6 @@ Product Management (Admin Only)
 
 Admins can create, update, delete, and view products
 
-Customers have read-only access
 
 Secure route-level authorization
 
