@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $table = 'products';
     protected $fillable = [
         'name',
         'description',
@@ -22,9 +23,9 @@ class Product extends Model
         'stock' => 'integer',
     ];
 
-    public function getImageUrlAttribute()
+    public function getImageUrlAttribute(): string
     {
-        return $this->image ? asset('storage/' . $this->image) : asset('images/default.png');    
+        return asset('images/' . ($this->image ?? 'default.png'));  
     }
     
 }

@@ -1,57 +1,32 @@
-- Install Dependencies
-  composer install
-  npm install
+Laravel Multi-Auth Product Management System
+Overview
 
-- Database Migration
-   php artisan migrate
+This is a backend-focused Laravel application built to demonstrate secure multi-authentication, scalable product management, bulk imports using queues, and real-time user presence.
 
-- Run Queues
-  php artisan run:work
+The UI is intentionally minimal to keep the focus on backend architecture, performance, and security, as required by the assignment.
 
-- run vite assets
-  npm run dev 
+Tech Stack
 
+Laravel 10
 
-
-Laravel Multi Auth Products Management System
-
-Description
-This project is a backend-focused Laravel application
-- Select multi authentication (Admin/Customer)
-
-
-The UI is intentionally minimal (Blade + Tailwind) to keep the focus on backend logic, security, and scalability.
-
-
-Tech 
-
-Laravel 10+
-
-PHP 8.2+
+PHP 8.3
 
 MySQL
 
-Laravel Vite
-
-Tailwind CSS
+Tailwind CSS (Blade)
 
 Laravel Queues & Jobs
 
-WebSockets (Laravel Echo + Pusher / Soketi / Reverb)
+WebSockets (Laravel Echo + Reverb)
 
-Laravel Testing (PHPUnit)
+PHPUnit (Laravel Testing)
 
+Core Features
+Multi-Authentication
 
-Features Implemented
-1. Multi-Authentication System
+Separate Admin and Customer authentication
 
-Separate authentication flows for:
-
-Admin
-
-Customer
-
-Separate models, tables, guards, and middleware
+Separate models, tables, guards, middleware, and dashboards
 
 Route protection using:
 
@@ -59,35 +34,75 @@ auth:admin
 
 auth:customer
 
-2. Product Management (Admin)
+Product Management (Admin Only)
 
-Admins can:
+Admins can create, update, delete, and view products
 
-Create, update, delete products
+Customers have read-only access
 
-Manage product fields:
+Secure route-level authorization
 
-name
+Bulk Product Import
 
-description
+Import up to 100,000 products
 
-price
+CSV/Excel support
 
-category
+Chunked reading + batch inserts
 
-stock
+Queue-based background processing
 
-image
+Row-level validation
+
+Default image applied if missing
+
+Sample file included:
+products_sample_import.csv
+
+Real-Time User Presence
+
+Tracks online/offline status for Admins and Customers
+
+Presence stored in database (is_online, last_seen_at)
+
+Real-time updates using WebSockets
+
+No AJAX polling
+
+Setup
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+
+php artisan queue:work
+npm run dev
+php artisan reverb:start
+
+Testing
+
+Run all tests using:
+
+php artisan test
 
 
-3. Frontend (Minimal by Design)
+Includes:
 
-  Blade templates
+At least one feature test
 
-  Tailwind CSS via Vite
+At least one unit test for key flows
 
-  Separate layouts:
+Architectural Notes
 
-  web.blade.php
+Separate user tables (Admin & Customer) for better security and clarity
 
-  app.blade.php
+Queues used for heavy operations to prevent timeouts
+
+WebSockets used for real-time updates without polling
+
+✔ Backend-focused
+✔ Scalable
+✔ Secure
+✔ Assignment-compliant
